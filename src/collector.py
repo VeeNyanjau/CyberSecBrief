@@ -10,94 +10,149 @@ logger = logging.getLogger(__name__)
 
 class NewsCollector:
     def __init__(self):
-        # Configuration for categorized sources
+        # Configuration for grouped sources
         self.sources = [
-            # --- Trending Vulnerabilities ---
+            # 1. Emerging Threats & Attack Patterns
+            # Focus: New malware, novel phishing, zero-day exploitation patterns
             {
-                "name": "Exploit-DB",
-                "url": "https://www.exploit-db.com/rss.xml",
-                "category": "Trending Vulnerabilities",
+                "name": "Threatpost", 
+                "url": "https://threatpost.com/feed/", 
+                "category": "Emerging Threats & Attack Patterns", 
                 "type": "rss"
             },
             {
-                "name": "CVE Feed",
-                "url": "https://cvefeed.io/rssfeed/latest",
-                "category": "Trending Vulnerabilities",
+                "name": "BleepingComputer",
+                "url": "https://www.bleepingcomputer.com/feed/",
+                "category": "Emerging Threats & Attack Patterns",
                 "type": "rss"
             },
             
-            # --- Research & Project Ideas ---
+            # 2. Defensive Techniques & Blue Team Strategies
+            # Focus: Detection engineering, SOC workflows, IR playbooks
             {
-                "name": "arXiv (Security)",
-                "url": "http://export.arxiv.org/rss/cs.CR",
-                "category": "Research & Project Ideas",
+                "name": "Microsoft Security Blog", 
+                "url": "https://www.microsoft.com/security/blog/feed/", 
+                "category": "Defensive Techniques & Blue Team Strategies", 
                 "type": "rss"
             },
             {
-                "name": "IEEE Spectrum",
-                "url": "https://spectrum.ieee.org/feeds/topic/telecom", # Using telecom/tech as proxy if specific security feed is flaky, but trying specific first if known.
-                # Better: https://spectrum.ieee.org/feeds/topic/cybersecurity is the target, defaulting to generic if needed.
-                "url": "https://spectrum.ieee.org/feeds/topic/cybersecurity",
-                "category": "Research & Project Ideas",
+                "name": "Splunk Blog",
+                "url": "https://www.splunk.com/en_us/blog/security/feed.xml",
+                "category": "Defensive Techniques & Blue Team Strategies",
                 "type": "rss"
             },
             {
-                "name": "OWASP Blog",
-                "url": "https://owasp.org/feed.xml",
-                "category": "Research & Project Ideas",
-                "type": "rss"
-            },
-            {
-                "name": "Medium (Cybersecurity)",
-                "url": "https://medium.com/feed/tag/cybersecurity",
-                "category": "Research & Project Ideas",
-                "type": "rss"
-            },
-             {
-                "name": "Bugcrowd",
-                "url": "https://www.bugcrowd.com/blog/feed/",
-                "category": "Research & Project Ideas",
-                "type": "rss"
+                 "name": "SANS Internet Storm Center",
+                 "url": "https://isc.sans.edu/rssfeed.xml",
+                 "category": "Defensive Techniques & Blue Team Strategies",
+                 "type": "rss"
             },
 
-            # --- Industry Trends ---
-            {
-                "name": "The Hacker News",
-                "url": "https://feeds.feedburner.com/TheHackersNews",
-                "category": "Industry Trends",
-                "type": "rss"
-            },
-             {
-                "name": "Krebs on Security",
-                "url": "https://krebsonsecurity.com/feed/",
-                "category": "Industry Trends",
-                "type": "rss"
-            },
-            {
-                "name": "Dark Reading",
-                "url": "https://www.darkreading.com/rss.xml",
-                "category": "Industry Trends",
-                "type": "rss"
-            },
-            {
-                "name": "SecurityWeek",
-                "url": "https://feeds.feedburner.com/securityweek",
-                "category": "Industry Trends",
-                "type": "rss"
-            },
-             {
-                "name": "Reddit (r/netsec)",
-                "url": "https://www.reddit.com/r/netsec/.rss",
-                "category": "Industry Trends",
-                "type": "rss"
-            },
-
-            # --- Open-Source Tools ---
+            # 3. Tools, Frameworks & Open-Source Spotlight
+            # Focus: New tools, plugins, frameworks
             {
                 "name": "GitHub Trending (Security)",
                 "url": "https://github.com/topics/security?o=desc&s=updated",
-                "category": "Open-Source Tools",
+                "category": "Tools, Frameworks & Open-Source Spotlight",
                 "type": "scraper_github"
+            },
+            {
+                "name": "KitPloit - PenTest Tools",
+                "url": "http://feeds.feedburner.com/PentestTools",
+                "category": "Tools, Frameworks & Open-Source Spotlight",
+                "type": "rss"
+            },
+
+            # 4. Academic Research & Papers
+            # Focus: Theory into practice, summaries of papers
+            {
+                "name": "arXiv (Security)",
+                "url": "http://export.arxiv.org/rss/cs.CR",
+                "category": "Academic Research & Papers",
+                "type": "rss"
+            },
+            {
+                "name": "IEEE Spectrum (Cyber)",
+                "url": "https://spectrum.ieee.org/feeds/topic/cybersecurity",
+                "category": "Academic Research & Papers",
+                "type": "rss"
+            },
+
+            # 5. Vulnerabilities & Exploit Analysis
+            # Focus: CVE trends, exploit chains, misconfigurations
+            {
+                "name": "Exploit-DB",
+                "url": "https://www.exploit-db.com/rss.xml",
+                "category": "Vulnerabilities & Exploit Analysis",
+                "type": "rss"
+            },
+            {
+                "name": "Packet Storm",
+                "url": "https://packetstormsecurity.com/feeds/files/",
+                "category": "Vulnerabilities & Exploit Analysis",
+                "type": "rss"
+            },
+            
+            # 6. Security Failures & Postmortems
+            # Focus: Breach analyses, incident timelines, lessons learned
+            # Note: Often covered in general news, but reliable breach trackers help
+            {
+                "name": "The Record (Recorded Future)",
+                "url": "https://therecord.media/feed/",
+                "category": "Security Failures & Postmortems",
+                "type": "rss"
+            },
+            {
+                "name": "Have I Been Pwned Latest", # Proxy via news site or blog
+                "url": "https://www.troyhunt.com/rss/",
+                "category": "Security Failures & Postmortems",
+                "type": "rss"
+            },
+
+            # 7. Ethics, Law & Policy in Cybersecurity
+            # Focus: Cyber laws, privacy debates, ethical boundaries
+            {
+                "name": "EFF Updates",
+                "url": "https://www.eff.org/rss/updates.xml",
+                "category": "Ethics, Law & Policy in Cybersecurity",
+                "type": "rss"
+            },
+            {
+                "name": "Lawfare Blog (Cyber)",
+                "url": "https://www.lawfareblog.com/taxonomy/term/65/feed", # Cyber law specific tag if available, else main
+                "category": "Ethics, Law & Policy in Cybersecurity",
+                "type": "rss"
+            },
+            {
+                "name": "Krebs on Security", # Often covers law/policy/crime
+                "url": "https://krebsonsecurity.com/feed/",
+                "category": "Ethics, Law & Policy in Cybersecurity",
+                "type": "rss"
+            },
+
+            # 8. AI, Automation & Cybersecurity
+            # Focus: AI offense/defense, LLM risks
+            {
+                "name": "Schneier on Security", # Often discusses AI/Crypto implications
+                "url": "https://www.schneier.com/feed/atom/",
+                "category": "AI, Automation & Cybersecurity",
+                "type": "rss"
+            },
+            # AI specific feeds are rare, will rely on keywords from general feeds too
+
+            # 9. Sector-Specific Security & Regional
+            # Focus: Healthcare, Finance, Local context
+            {
+                "name": "Dark Reading (Risk)",
+                "url": "https://www.darkreading.com/rss/risk-management",
+                "category": "Sector-Specific Security",
+                "type": "rss"
+            },
+             {
+                "name": "SecurityWeek (Cybercrime)",
+                "url": "https://feeds.feedburner.com/securityweek",
+                "category": "Sector-Specific Security", # Will need keyword filtering to be accurate
+                "type": "rss"
             }
         ]
 

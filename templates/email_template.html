@@ -5,71 +5,148 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
+            background-color: #f4f6f9;
+            /* Light grey background */
             color: #333;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
         }
 
         .header {
-            background-color: #2c3e50;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            /* Modern gradient */
             color: #fff;
-            padding: 20px;
+            padding: 30px 20px;
             text-align: center;
-            border-radius: 5px 5px 0 0;
+            border-radius: 8px 8px 0 0;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 0.5px;
         }
 
         .date {
             font-size: 0.9em;
-            color: #bdc3c7;
-        }
-
-        .category-title {
-            color: #e74c3c;
-            border-bottom: 2px solid #ecf0f1;
-            padding-bottom: 5px;
-            margin-top: 25px;
-            margin-bottom: 15px;
-            font-size: 1.1em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .story {
-            border-bottom: 1px solid #eee;
-            padding: 15px 0;
-        }
-
-        .story:last-child {
-            border-bottom: none;
-        }
-
-        .story-title {
-            font-size: 1.1em;
-            font-weight: bold;
-            color: #2980b9;
-            text-decoration: none;
-        }
-
-        .story-meta {
-            font-size: 0.85em;
-            color: #7f8c8d;
+            opacity: 0.8;
             margin-top: 5px;
         }
 
+        .content {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Category Styling */
+        .category-section {
+            margin-bottom: 30px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #ecf0f1;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .category-accent {
+            width: 5px;
+            height: 25px;
+            background-color: #3498db;
+            /* Default Blue */
+            margin-right: 12px;
+            border-radius: 2px;
+        }
+
+        /* Color coding per group roughly */
+        .cat-threat .category-accent {
+            background-color: #e74c3c;
+        }
+
+        /* Red */
+        .cat-defensive .category-accent {
+            background-color: #2ecc71;
+        }
+
+        /* Green */
+        .cat-tools .category-accent {
+            background-color: #9b59b6;
+        }
+
+        /* Purple */
+        .cat-research .category-accent {
+            background-color: #f1c40f;
+        }
+
+        /* Yellow */
+
+        .category-title {
+            color: #2c3e50;
+            font-size: 1.25em;
+            font-weight: 600;
+            margin: 0;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Story Card */
+        .story {
+            background-color: #fff;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .story:hover {
+            border-left-color: #3498db;
+            background-color: #f8f9fa;
+        }
+
+        .story-title {
+            display: block;
+            font-size: 1.15em;
+            font-weight: 700;
+            color: #2980b9;
+            text-decoration: none;
+            margin-bottom: 6px;
+        }
+
+        .story-meta {
+            font-size: 0.8em;
+            color: #7f8c8d;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .summary {
-            margin-top: 8px;
             font-size: 0.95em;
+            line-height: 1.5;
+            color: #444;
+        }
+
+        .empty-state {
+            font-style: italic;
+            color: #95a5a6;
+            padding: 10px 15px;
+            font-size: 0.9em;
         }
 
         .footer {
-            margin-top: 30px;
-            font-size: 0.8em;
+            margin-top: 40px;
             text-align: center;
-            color: #7f8c8d;
-            border-top: 1px solid #eee;
+            font-size: 0.85em;
+            color: #95a5a6;
             padding-top: 20px;
+            border-top: 1px solid #eee;
         }
     </style>
 </head>
@@ -82,48 +159,44 @@
 
     <div class="content">
         {% set categories = [
-        'Trending Vulnerabilities',
-        'Industry Trends',
-        'Research & Project Ideas',
-        'Open-Source Tools'
+        ('Emerging Threats & Attack Patterns', 'cat-threat'),
+        ('Defensive Techniques & Blue Team Strategies', 'cat-defensive'),
+        ('Tools, Frameworks & Open-Source Spotlight', 'cat-tools'),
+        ('Academic Research & Papers', 'cat-research'),
+        ('Vulnerabilities & Exploit Analysis', 'cat-threat'),
+        ('Security Failures & Postmortems', 'cat-threat'),
+        ('Ethics, Law & Policy in Cybersecurity', 'cat-defensive'),
+        ('AI, Automation & Cybersecurity', 'cat-tools'),
+        ('Sector-Specific Security', 'cat-defensive')
         ] %}
 
-        {% for category in categories %}
-        {% if stories[category] %}
-        <div class="category-section">
-            <h2 class="category-title">{{ category }}</h2>
-            {% for story in stories[category] %}
-            <div class="story">
-                <div><a href="{{ story.link }}" class="story-title">{{ story.title }}</a></div>
-                <div class="story-meta">Source: {{ story.source }} | Published: {{ story.published.strftime('%H:%M') }}
-                </div>
-                <div class="summary">{{ story.clean_summary }}</div>
+        {% for category_name, style_class in categories %}
+        <div class="category-section {{ style_class }}">
+            <div class="category-header">
+                <div class="category-accent"></div>
+                <h2 class="category-title">{{ category_name }}</h2>
             </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-        {% endfor %}
 
-        <!-- Fallback for generic stories if any key isn't in defined list, though we expect these 4 -->
-        {% for cat, cat_stories in stories.items() %}
-        {% if cat not in categories %}
-        <div class="category-section">
-            <h2 class="category-title">{{ cat }}</h2>
-            {% for story in cat_stories %}
+            {% if stories[category_name] %}
+            {% for story in stories[category_name] %}
             <div class="story">
-                <div><a href="{{ story.link }}" class="story-title">{{ story.title }}</a></div>
-                <div class="story-meta">Source: {{ story.source }} | Published: {{ story.published.strftime('%H:%M') }}
+                <a href="{{ story.link }}" class="story-title">{{ story.title }}</a>
+                <div class="story-meta">
+                    {{ story.source }} • {{ story.published.strftime('%H:%M UTC') }}
                 </div>
                 <div class="summary">{{ story.clean_summary }}</div>
             </div>
             {% endfor %}
+            {% else %}
+            <div class="empty-state">No significant updates in this category today.</div>
+            {% endif %}
         </div>
-        {% endif %}
         {% endfor %}
     </div>
 
     <div class="footer">
-        <p>Generated automatically by CyberSec Daily Brief Bot.</p>
+        <p>Generated automatically by CyberSec Brief Bot • <a href="https://github.com/vickymuiruri/CyberSecBrief"
+                style="color:#95a5a6;">View on GitHub</a></p>
     </div>
 </body>
 

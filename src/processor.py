@@ -18,47 +18,51 @@ class ContentProcessor:
     def process(self, raw_stories: List[Dict]) -> Dict[str, List[Dict]]:
         """
         Deduplicates, scores, and categorizes stories.
-        Returns a dictionary: { 'Category Name': [stories] }
-        Limits total stories to under 10 (approx 2-3 per category).
+        Returns a dictionary with all 9 categories initialized.
         """
         if not raw_stories:
-            return {}
+            raw_stories = []
 
         # 1. Deduplicate globally by link
         unique_stories = {}
         for story in raw_stories:
             if story['link'] not in unique_stories:
                 story['clean_summary'] = self.clean_html(story['summary'])
-                if len(story['clean_summary']) > 500:
-                    story['clean_summary'] = story['clean_summary'][:497] + "..."
+                # Truncate summary
+                if len(story['clean_summary']) > 400: # Slightly shorter for 9 cats
+                    story['clean_summary'] = story['clean_summary'][:397] + "..."
                 unique_stories[story['link']] = story
         
-        # 2. Group by Category
-        categorized = {
-            "Trending Vulnerabilities": [],
-            "Research & Project Ideas": [],
-            "Industry Trends": [],
-            "Open-Source Tools": []
-        }
+        # 2. Initialize Categories
+        categories = [
+            "Emerging Threats & Attack Patterns",
+            "Defensive Techniques & Blue Team Strategies",
+            "Tools, Frameworks & Open-Source Spotlight",
+            "Academic Research & Papers",
+            "Vulnerabilities & Exploit Analysis",
+            "Security Failures & Postmortems",
+            "Ethics, Law & Policy in Cybersecurity",
+            "AI, Automation & Cybersecurity",
+            "Sector-Specific Security"
+        ]
+        
+        categorized = {cat: [] for cat in categories}
 
+        # 3. Assign Stories
         for story in unique_stories.values():
-            cat = story.get('category', 'Industry Trends') # Default fallback
-            if cat in categorized:
-                categorized[cat].append(story)
-            else:
-                categorized['Industry Trends'].append(story)
+            cat = story.get('category')
+            # Fallback if category invalid or missing
+            if cat not in categorized:
+                # Basic keyword fallback could go here, for now default to Emerging Threats
+                cat = "Emerging Threats & Attack Patterns"
+            
+            categorized[cat].append(story)
 
-        # 3. Score and Sort within Categories
+        # 4. Score and Sort within Categories
         final_output = {}
         
-        # Define limits per category to keep total < 10
-        # Total = 3 + 2 + 2 + 2 = 9
-        limits = {
-            "Trending Vulnerabilities": 3,
-            "Research & Project Ideas": 2,
-            "Industry Trends": 2,
-            "Open-Source Tools": 2
-        }
+        # Limit strictly to 2 per category to keep digest readable (9*2 = 18 max)
+        LIMIT_PER_CATEGORY = 2
 
         for category, stories in categorized.items():
             # Score
@@ -74,8 +78,7 @@ class ContentProcessor:
             stories.sort(key=lambda x: (x['score'], x['published']), reverse=True)
             
             # Apply limit
-            limit = limits.get(category, 2)
-            final_output[category] = stories[:limit]
+            final_output[category] = stories[:LIMIT_PER_CATEGORY]
 
         # Calculate total
         total_count = sum(len(v) for v in final_output.values())
