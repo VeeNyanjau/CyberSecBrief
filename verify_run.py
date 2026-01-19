@@ -44,6 +44,27 @@ def main():
                 for story in stories:
                     logger.info(f"   [ {story['score']} ] {story['title']} ({story['source']})")
 
+        # 3. Verify PDF Generation
+        try:
+            from src.emailer import EmailService
+            logger.info("Testing PDF Generation...")
+            emailer = EmailService()
+            template = emailer.env.get_template('email_template.html')
+            date_str = "2024-01-01" # Dummy date
+            html_content = template.render(date=date_str, stories=top_stories)
+            
+            pdf_bytes = emailer.create_pdf(html_content)
+            if pdf_bytes:
+                 logger.info(f"PDF successfully generated ({len(pdf_bytes)} bytes). Saving to verify_output.pdf")
+                 with open("verify_output.pdf", "wb") as f:
+                     f.write(pdf_bytes)
+            else:
+                 logger.error("PDF generation returned None.")
+        except ImportError:
+            logger.error("xhtml2pdf not installed or accessible.")
+        except Exception as e:
+            logger.error(f"PDF Verification failed: {e}")
+
         logger.info("Verification completed.")
 
     except Exception as e:
