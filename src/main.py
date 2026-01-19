@@ -29,7 +29,7 @@ def main():
 
         # 3. Process and Rank
         processor = ContentProcessor()
-        top_stories = processor.process(raw_stories)
+        top_stories, insights = processor.process(raw_stories)
         
         if not top_stories:
             logger.warning("No stories remained after processing. Exiting.")
@@ -37,7 +37,7 @@ def main():
 
         # 4. Send Email
         emailer = EmailService()
-        emailer.send_briefing(top_stories)
+        emailer.send_briefing(top_stories, insights)
         
         logger.info("Daily briefing completed successfully.")
 

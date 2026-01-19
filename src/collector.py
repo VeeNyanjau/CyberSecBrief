@@ -163,7 +163,8 @@ class NewsCollector:
         """
         collected_stories = []
         # Use timezone-aware UTC for comparison
-        cutoff_time = datetime.now(timezone.utc) - timedelta(hours=24)
+        # Extended to 48 hours to ensure content availability
+        cutoff_time = datetime.now(timezone.utc) - timedelta(hours=48)
         
         for source in self.sources:
             try:
