@@ -7,6 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.application import MIMEApplication
 from jinja2 import Environment, FileSystemLoader
 from datetime import datetime
+from typing import Dict, List
 from xhtml2pdf import pisa
 from .config import SMTP_SERVER, SMTP_PORT, SMTP_USER, SMTP_PASSWORD, RECIPIENT_EMAIL
 
