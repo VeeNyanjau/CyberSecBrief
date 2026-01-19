@@ -103,8 +103,8 @@ class NewsCollector:
                 "type": "rss"
             },
             {
-                "name": "Have I Been Pwned Latest", # Proxy via news site or blog
-                "url": "https://www.troyhunt.com/rss/",
+                "name": "Dark Reading (Attacks & Breaches)", 
+                "url": "https://www.darkreading.com/rss/attacks-breaches",
                 "category": "Security Failures & Postmortems",
                 "type": "rss"
             },

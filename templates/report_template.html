@@ -4,162 +4,132 @@
 <head>
     <style>
         /* PDF Specific CSS for xhtml2pdf */
-        /* Explicitly link 'main_template' to the default layout */
-        @page main_template {
+        @page {
             size: A4;
-            margin: 2cm;
+            margin: 1.5cm;
 
-            /* Define a footer frame */
+            /* Reduced margins */
             @frame footer_frame {
                 -pdf-frame-content: footerContent;
                 bottom: 1cm;
-                margin-left: 2cm;
-                margin-right: 2cm;
+                margin-left: 1.5cm;
+                margin-right: 1.5cm;
                 height: 1cm;
             }
         }
 
-        /* Define a specific template for the cover page with no footer */
-        @page cover_template {
-            margin: 0cm;
-            /* No footer frame defined here, so it should be blank */
-        }
-
         body {
             font-family: Helvetica, sans-serif;
-            line-height: 1.5;
+            line-height: 1.4;
+            /* Tighter line height */
             color: #2c3e50;
+            font-size: 10pt;
+            /* Slightly smaller text */
         }
 
         /* Footer Content */
         #footerContent {
             text-align: center;
-            font-size: 10pt;
+            font-size: 9pt;
             color: #7f8c8d;
         }
 
-        /* Cover Page Styling */
-        .cover-page {
+        /* Banner Header */
+        .banner {
             text-align: center;
-            padding-top: 30%;
-        }
-
-        .cover-title {
-            font-size: 48pt;
-            font-weight: bold;
-            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 15px;
             margin-bottom: 20px;
         }
 
-        .cover-subtitle {
+        .banner-title {
             font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .banner-subtitle {
+            font-size: 12pt;
             color: #7f8c8d;
-            margin-bottom: 50px;
         }
 
-        .cover-date {
-            font-size: 14pt;
-            color: #34495e;
-            margin-top: 100px;
-        }
-
-        /* Executive Summary & Signals Styling */
+        /* Executive Summary & Signals Styling (Compressed) */
         .exec-summary-box {
             background-color: #f8f9fa;
-            border-left: 5px solid #3498db;
-            padding: 20px;
-            margin-bottom: 30px;
-            page-break-after: always;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-bottom: 20px;
         }
 
         .section-header {
-            font-size: 18pt;
+            font-size: 14pt;
             color: #2c3e50;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            font-weight: bold;
+            margin-bottom: 10px;
         }
 
         .signal-grid {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .signal-card {
             background-color: #eafaf1;
             border: 1px solid #d5f5e3;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
         }
 
         .signal-title {
             font-weight: bold;
             color: #27ae60;
-            font-size: 12pt;
-            margin-bottom: 5px;
-        }
-
-        /* TOC Styling */
-        pdftoc {
-            color: #000;
-        }
-
-        pdftoc a {
-            color: #000;
-            text-decoration: none;
+            font-size: 10pt;
         }
 
         /* Content Styling */
-        h1 {
-            color: #2c3e50;
-            font-size: 24pt;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
-
         h2.cat-header {
             color: #2c3e50;
-            font-size: 20pt;
-            margin-bottom: 15px;
-            padding-top: 20px;
-            /* Force new page before category */
-            page-break-before: always;
+            font-size: 14pt;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+            margin-top: 25px;
+            margin-bottom: 10px;
+            page-break-after: avoid;
+            /* Keep header with content */
         }
 
         .story {
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #bdc3c7;
-            /* Prevent breaking stories across pages if possible */
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px dotted #ecf0f1;
             page-break-inside: avoid;
+            /* Try to keep stories intact */
         }
 
         .story-title {
-            font-size: 14pt;
+            font-size: 11pt;
             font-weight: bold;
             color: #2980b9;
             text-decoration: none;
-            display: block;
-            margin-bottom: 5px;
         }
 
         .story-meta {
-            font-size: 9pt;
-            color: #7f8c8d;
-            margin-bottom: 10px;
+            font-size: 8pt;
+            color: #95a5a6;
+            margin-bottom: 5px;
         }
 
         .summary {
-            font-size: 11pt;
+            font-size: 10pt;
             text-align: justify;
         }
 
         .why-box {
             background-color: #fff8e1;
-            border-left: 4px solid #f1c40f;
-            padding: 10px;
-            margin-top: 10px;
-            font-size: 10pt;
+            border-left: 3px solid #f1c40f;
+            padding: 5px 8px;
+            margin-top: 5px;
+            font-size: 9pt;
             font-style: italic;
             color: #5d4037;
         }
@@ -168,17 +138,18 @@
             display: inline-block;
             background-color: #9b59b6;
             color: white;
-            padding: 2px 6px;
-            border-radius: 3px;
-            font-size: 8pt;
-            margin-left: 10px;
+            padding: 1px 4px;
+            border-radius: 2px;
+            font-size: 7pt;
+            margin-left: 5px;
             vertical-align: middle;
         }
 
         .empty-state {
             font-style: italic;
             color: #95a5a6;
-            margin-top: 20px;
+            font-size: 9pt;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -190,47 +161,32 @@
         <pdf:pagenumber />
     </div>
 
-    <!-- Start with Cover Template -->
-    <pdf:nexttemplate name="cover_template" />
-    <div class="cover-page">
-        <div class="cover-title">CyberSecBrief</div>
-        <div class="cover-subtitle">Cybersecurity Trends, Research & Project Ideas</div>
-        <div class="cover-date">{{ date }}</div>
+    <!-- 1. Banner Header -->
+    <div class="banner">
+        <div class="banner-title">CyberSecBrief</div>
+        <div class="banner-subtitle">Daily Cybersecurity Trends & Insights | {{ date }}</div>
     </div>
 
-    <!-- Switch to Main Template -->
-    <pdf:nexttemplate name="main_template" />
-    <div style="page-break-after: always;"></div>
-
-    <!-- 2. Executive Summary & Signals (New Page) -->
+    <!-- 2. Executive Summary & Signals (Flowing) -->
     {% if insights.executive_summary or insights.signals %}
     <div class="exec-summary-box">
-        <div class="section-header">Executive Insight Summary</div>
+        <div class="section-header">Executive Insight</div>
         <p>{{ insights.executive_summary }}</p>
-    </div>
 
-    <div class="section-header">Signals & Patterns</div>
-    <div class="signal-grid">
-        {% for signal in insights.signals %}
-        <div class="signal-card">
-            <div class="signal-title">SIGNAL {{ loop.index }}: {{ signal.title }}</div>
-            <div>{{ signal.description }}</div>
+        {% if insights.signals %}
+        <div style="margin-top: 15px;">
+            <div style="font-weight: bold; color: #27ae60; margin-bottom: 5px;">Detected Signals & Patterns:</div>
+            {% for signal in insights.signals %}
+            <div style="margin-bottom: 8px;">
+                <strong>{{ signal.title }}:</strong> {{ signal.description }}
+            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
+        {% endif %}
     </div>
-
-    <div style="page-break-after: always;"></div>
     {% endif %}
 
-    <!-- 3. Table of Contents -->
-    <h1>Table of Contents</h1>
-    <div>
-        <pdf:toc />
-    </div>
-
-    <div style="page-break-after: always;"></div>
-
-    <!-- 4. Content Sections -->
+    <!-- 3. Content Sections (Continuous Flow) -->
     {% set categories = [
     'Emerging Threats & Attack Patterns',
     'Defensive Techniques & Blue Team Strategies',
@@ -268,7 +224,7 @@
     </div>
     {% endfor %}
     {% else %}
-    <div class="empty-state">No significant updates in this category today.</div>
+    <div class="empty-state">No significant updates.</div>
     {% endif %}
 
     {% endfor %}
