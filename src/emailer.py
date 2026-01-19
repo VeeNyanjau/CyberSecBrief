@@ -26,11 +26,8 @@ class EmailService:
             return None
         return pdf_buffer.getvalue()
 
-    def send_briefing(self, stories: dict):
-        if not stories:
-            logger.warning("No stories to email. Skipping.")
-            return
-
+    def send_briefing(self, stories: Dict[str, List[Dict]], insights: Dict = None) -> None:
+        """Generates the HTML briefing and sends it via email with PDF attachment."""
         try:
             # Load both templates
             email_template = self.env.get_template('email_template.html')
@@ -39,16 +36,22 @@ class EmailService:
             date_str = datetime.now().strftime('%Y-%m-%d')
             subject = f"Daily Cybersecurity & IT Briefing – {date_str}"
             
+            # Default empty insights if None
+            if not insights:
+                insights = {'executive_summary': '', 'signals': []}
+
             # Render Email Body (HTML optimized for email clients)
             email_html = email_template.render(
                 date=date_str,
-                stories=stories
+                stories=stories,
+                insights=insights
             )
             
             # Render PDF Content (HTML optimized for printing/PDF)
             pdf_html = report_template.render(
                 date=date_str,
-                stories=stories
+                stories=stories,
+                insights=insights
             )
 
             msg = MIMEMultipart('mixed') # Changed to mixed to support attachments

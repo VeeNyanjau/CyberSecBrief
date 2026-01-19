@@ -1,7 +1,8 @@
 import logging
-from typing import List, Dict
+from typing import List, Dict, Tuple
 from bs4 import BeautifulSoup
 import re
+from src.insights import InsightGenerator
 
 logger = logging.getLogger(__name__)
 
@@ -9,16 +10,19 @@ class ContentProcessor:
     def __init__(self):
         # Specific keywords could be used for extra scoring if needed
         self.keywords = ['zero-day', 'vulnerability', 'breach', 'ransomware', 'critical', 'patch', 'exploit', 'malware']
+        self.insight_gen = InsightGenerator()
 
     def clean_html(self, text: str) -> str:
         """Removes HTML tags and unescapes characters."""
         soup = BeautifulSoup(text, "html.parser")
         return soup.get_text(separator=' ').strip()
 
-    def process(self, raw_stories: List[Dict]) -> Dict[str, List[Dict]]:
+    def process(self, raw_stories: List[Dict]) -> Tuple[Dict[str, List[Dict]], Dict]:
         """
-        Deduplicates, scores, and categorizes stories.
-        Returns a dictionary with all 9 categories initialized.
+        Deduplicates, scores, categorizes, AND enriches stories.
+        Returns:
+            1. Categorized stories dict
+            2. Briefing insights dict (Executive Summary, Signals)
         """
         if not raw_stories:
             raw_stories = []
@@ -80,8 +84,20 @@ class ContentProcessor:
             # Apply limit
             final_output[category] = stories[:LIMIT_PER_CATEGORY]
 
+        # 5. GENERATE INSIGHTS (Enrichment)
+        logger.info("Generating AI Insights for stories...")
+        for cat, stories in final_output.items():
+            for story in stories:
+                analysis = self.insight_gen.analyze_story(story)
+                story['why_it_matters'] = analysis.get('why_it_matters', '')
+                story['research_tag'] = analysis.get('research_tag', 'General') # For future grouping
+
+        # Generate Report-Level Insights
+        logger.info("Generating Executive Briefing Insights...")
+        report_insights = self.insight_gen.generate_briefing_insight(final_output)
+
         # Calculate total
         total_count = sum(len(v) for v in final_output.values())
         logger.info(f"Processed into {total_count} final items across {len(final_output)} categories.")
         
-        return final_output
+        return final_output, report_insights

@@ -31,18 +31,29 @@ def main():
             # Print sample raw story
             logger.info(f"Sample Raw: {raw_stories[0]['title']} from {raw_stories[0]['source']} (Cat: {raw_stories[0].get('category')})")
 
-        # 2. Process and Rank
+        # 2. Process & Enrich Content
+        logger.info("Processing and Categorizing News (with AI insights if enabled)...")
         processor = ContentProcessor()
-        top_stories = processor.process(raw_stories)
+        # process() now returns a tuple: (stories, insights)
+        categorized_stories, insights = processor.process(raw_stories)
         
-        if not top_stories:
-            logger.warning("No stories remained after processing.")
+        # Log results
+        for category, items in categorized_stories.items():
+            if items:
+                logger.info(f"--- {category} ({len(items)}) ---")
+                for i, item in enumerate(items):
+                    title = item.get('title', 'No Title')
+                    source = item.get('source', 'Unknown')
+                    why = item.get('why_it_matters', 'N/A')
+                    logger.info(f"   [ {i} ] {title} ({source})")
+                    if why:
+                        logger.info(f"       -> Why: {why[:50]}...")
+        
+        # Log Executive Summary availability
+        if insights and insights.get('executive_summary'):
+             logger.info("Executive Summary generated.")
         else:
-            logger.info("Processing complete. Categorized Results:")
-            for category, stories in top_stories.items():
-                logger.info(f"--- {category} ({len(stories)}) ---")
-                for story in stories:
-                    logger.info(f"   [ {story['score']} ] {story['title']} ({story['source']})")
+             logger.info("No Executive Summary (API Key missing or disabled).")
 
         # 3. Verify PDF Generation
         try:
@@ -52,7 +63,12 @@ def main():
             # Explicitly test the report template rendering
             report_template = emailer.env.get_template('report_template.html')
             date_str = "2024-01-01" # Dummy date
-            pdf_html = report_template.render(date=date_str, stories=top_stories)
+            
+            pdf_html = report_template.render(
+                date=date_str, 
+                stories=categorized_stories, 
+                insights=insights
+            )
             
             pdf_bytes = emailer.create_pdf(pdf_html)
             if pdf_bytes:

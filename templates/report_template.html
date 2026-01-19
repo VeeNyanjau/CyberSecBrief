@@ -63,6 +63,42 @@
             margin-top: 100px;
         }
 
+        /* Executive Summary & Signals Styling */
+        .exec-summary-box {
+            background-color: #f8f9fa;
+            border-left: 5px solid #3498db;
+            padding: 20px;
+            margin-bottom: 30px;
+            page-break-after: always;
+        }
+
+        .section-header {
+            font-size: 18pt;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .signal-grid {
+            margin-bottom: 30px;
+        }
+
+        .signal-card {
+            background-color: #eafaf1;
+            border: 1px solid #d5f5e3;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .signal-title {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 12pt;
+            margin-bottom: 5px;
+        }
+
         /* TOC Styling */
         pdftoc {
             color: #000;
@@ -77,8 +113,6 @@
         h1 {
             color: #2c3e50;
             font-size: 24pt;
-            border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
             margin-top: 0;
             margin-bottom: 20px;
         }
@@ -120,6 +154,27 @@
             text-align: justify;
         }
 
+        .why-box {
+            background-color: #fff8e1;
+            border-left: 4px solid #f1c40f;
+            padding: 10px;
+            margin-top: 10px;
+            font-size: 10pt;
+            font-style: italic;
+            color: #5d4037;
+        }
+
+        .research-tag {
+            display: inline-block;
+            background-color: #9b59b6;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 8pt;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
         .empty-state {
             font-style: italic;
             color: #95a5a6;
@@ -143,11 +198,31 @@
         <div class="cover-date">{{ date }}</div>
     </div>
 
-    <!-- Force Page Break and Switch to Main Template -->
+    <!-- Switch to Main Template -->
     <pdf:nexttemplate name="main_template" />
     <div style="page-break-after: always;"></div>
 
-    <!-- 2. Table of Contents -->
+    <!-- 2. Executive Summary & Signals (New Page) -->
+    {% if insights.executive_summary or insights.signals %}
+    <div class="exec-summary-box">
+        <div class="section-header">Executive Insight Summary</div>
+        <p>{{ insights.executive_summary }}</p>
+    </div>
+
+    <div class="section-header">Signals & Patterns</div>
+    <div class="signal-grid">
+        {% for signal in insights.signals %}
+        <div class="signal-card">
+            <div class="signal-title">SIGNAL {{ loop.index }}: {{ signal.title }}</div>
+            <div>{{ signal.description }}</div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div style="page-break-after: always;"></div>
+    {% endif %}
+
+    <!-- 3. Table of Contents -->
     <h1>Table of Contents</h1>
     <div>
         <pdf:toc />
@@ -155,7 +230,7 @@
 
     <div style="page-break-after: always;"></div>
 
-    <!-- 3. Content Sections -->
+    <!-- 4. Content Sections -->
     {% set categories = [
     'Emerging Threats & Attack Patterns',
     'Defensive Techniques & Blue Team Strategies',
@@ -174,11 +249,22 @@
     {% if stories[category_name] %}
     {% for story in stories[category_name] %}
     <div class="story">
-        <a href="{{ story.link }}" class="story-title">{{ story.title }}</a>
+        <div>
+            <a href="{{ story.link }}" class="story-title">{{ story.title }}</a>
+            {% if story.research_tag and story.research_tag != 'General' %}
+            <span class="research-tag">{{ story.research_tag }}</span>
+            {% endif %}
+        </div>
         <div class="story-meta">
             {{ story.source }} | {{ story.published.strftime('%Y-%m-%d') }}
         </div>
         <div class="summary">{{ story.clean_summary }}</div>
+
+        {% if story.why_it_matters %}
+        <div class="why-box">
+            <strong>Why This Matters:</strong> {{ story.why_it_matters }}
+        </div>
+        {% endif %}
     </div>
     {% endfor %}
     {% else %}
