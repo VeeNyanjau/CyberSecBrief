@@ -14,7 +14,7 @@ class EmailService:
         template_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates')
         self.env = Environment(loader=FileSystemLoader(template_dir))
 
-    def send_briefing(self, stories: list):
+    def send_briefing(self, stories: dict):
         if not stories:
             logger.warning("No stories to email. Skipping.")
             return
