@@ -47,15 +47,16 @@ def main():
         # 3. Verify PDF Generation
         try:
             from src.emailer import EmailService
-            logger.info("Testing PDF Generation...")
+            logger.info("Testing PDF Generation (Professional Report)...")
             emailer = EmailService()
-            template = emailer.env.get_template('email_template.html')
+            # Explicitly test the report template rendering
+            report_template = emailer.env.get_template('report_template.html')
             date_str = "2024-01-01" # Dummy date
-            html_content = template.render(date=date_str, stories=top_stories)
+            pdf_html = report_template.render(date=date_str, stories=top_stories)
             
-            pdf_bytes = emailer.create_pdf(html_content)
+            pdf_bytes = emailer.create_pdf(pdf_html)
             if pdf_bytes:
-                 logger.info(f"PDF successfully generated ({len(pdf_bytes)} bytes). Saving to verify_output.pdf")
+                 logger.info(f"Professional PDF successfully generated ({len(pdf_bytes)} bytes). Saving to verify_output.pdf")
                  with open("verify_output.pdf", "wb") as f:
                      f.write(pdf_bytes)
             else:

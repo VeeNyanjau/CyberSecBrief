@@ -32,11 +32,21 @@ class EmailService:
             return
 
         try:
-            template = self.env.get_template('email_template.html')
+            # Load both templates
+            email_template = self.env.get_template('email_template.html')
+            report_template = self.env.get_template('report_template.html')
+            
             date_str = datetime.now().strftime('%Y-%m-%d')
             subject = f"Daily Cybersecurity & IT Briefing – {date_str}"
             
-            html_content = template.render(
+            # Render Email Body (HTML optimized for email clients)
+            email_html = email_template.render(
+                date=date_str,
+                stories=stories
+            )
+            
+            # Render PDF Content (HTML optimized for printing/PDF)
+            pdf_html = report_template.render(
                 date=date_str,
                 stories=stories
             )
@@ -48,13 +58,13 @@ class EmailService:
 
             # Create the body (alternative part for HTML/Text)
             msg_body = MIMEMultipart('alternative')
-            part_html = MIMEText(html_content, 'html')
+            part_html = MIMEText(email_html, 'html')
             msg_body.attach(part_html)
             msg.attach(msg_body)
 
-            # Generate and attach PDF
+            # Generate and attach PDF using separate template
             logger.info("Generating PDF report...")
-            pdf_bytes = self.create_pdf(html_content)
+            pdf_bytes = self.create_pdf(pdf_html)
             if pdf_bytes:
                 pdf_attachment = MIMEApplication(pdf_bytes, _subtype="pdf")
                 pdf_attachment.add_header('Content-Disposition', 'attachment', filename=f"CyberSecBrief_{date_str}.pdf")
