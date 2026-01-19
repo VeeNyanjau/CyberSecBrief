@@ -23,11 +23,16 @@ pip install -r requirements.txt
 ```
 
 ### 3. Configuration
-Copy the example environment file:
-```bash
-cp .env.example .env
+Create a file named `.env` in the project root with the following content:
+```ini
+SMTP_SERVER=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your_email@gmail.com
+SMTP_PASSWORD=abcd-efgh-ijkl-mnop
+RECIPIENT_EMAIL=ballzballer53@gmail.com
 ```
-Edit `.env` with your details:
+
+Edit `.env` with your actual details:
 - `SMTP_USER`: Your email address
 - `SMTP_PASSWORD`: **This is NOT your login password.**
     1. Go to your [Google Account Security page](https://myaccount.google.com/security).
