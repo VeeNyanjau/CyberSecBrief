@@ -2,6 +2,7 @@ import logging
 import sys
 import os
 import io
+from typing import Dict, List
 
 # Add project root to python path
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
@@ -12,6 +13,22 @@ from src.processor import ContentProcessor
 # Configure logger
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger('verify_run')
+
+class MockInsightGenerator:
+    def analyze_story(self, story: Dict, region: str = "Global") -> Dict:
+        return {
+            'significance': 'High',
+            'why_it_matters': 'This is a mocked impact statement for verification.',
+            'who_should_care': 'ISPs, Banks, Government',
+            'action': 'Patch immediateley and review logs.',
+            'kenya_context': 'Specific context for Kenya would appear here.' if region == 'Kenya' else ''
+        }
+    
+    def generate_briefing_insight(self, all_stories: Dict) -> Dict:
+        return {
+            'executive_summary': 'This is a mocked executive summary.',
+            'signals': [{'title': 'Mock Signal', 'description': 'Mock description.'}]
+        }
 
 def main():
     try:
@@ -34,6 +51,12 @@ def main():
         # 2. Process & Enrich Content
         logger.info("Processing and Categorizing News (with AI insights if enabled)...")
         processor = ContentProcessor()
+        
+        # Monkeypatch for verification if API key is missing
+        if not processor.insight_gen.enabled:
+            logger.warning("InsightGenerator disabled (no API key). Using Mock for verification.")
+            processor.insight_gen = MockInsightGenerator()
+            
         # process() now returns a tuple: (stories, insights)
         categorized_stories, insights = processor.process(raw_stories)
         
@@ -42,14 +65,19 @@ def main():
         logger.info(f"--- Top {len(categorized_stories)} Stories ---")
         for i, item in enumerate(categorized_stories):
             title = item.get('title', 'No Title')
-            source = item.get('source', 'Unknown')
             region = item.get('region', 'Global')
             score = item.get('score', 0)
+            sig = item.get('significance', 'N/A')
             why = item.get('why_it_matters', 'N/A')
+            who = item.get('who_should_care', 'N/A')
+            action = item.get('action', 'N/A')
+            context = item.get('kenya_context', '')
             
-            logger.info(f"   [ {i+1} ] [{region}] {title} ({source}) - Score: {score}")
-            if why:
-                logger.info(f"       -> Why: {why[:50]}...")
+            logger.info(f"   [ {i+1} ] [{region}] [{sig}] {title} - Score: {score}")
+            if why: logger.info(f"       -> Why: {why}")
+            if who: logger.info(f"       -> Who: {who}")
+            if action: logger.info(f"       -> Action: {action}")
+            if context: logger.info(f"       -> 🇰🇪 Context: {context}")
         
         # Log Executive Summary availability
         if insights and insights.get('executive_summary'):

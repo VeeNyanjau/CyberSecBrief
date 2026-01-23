@@ -3,10 +3,13 @@
 A fully autonomous bot that collects, ranks, and emails the top 10 cybersecurity and IT news stories of the last 24 hours.
 
 ## Features
-- **Aggregates news** from sources like The Hacker News, BleepingComputer, Krebs on Security, etc.
-- **Ranks stories** based on keywords (zero-day, breach, critical) and freshness.
+- **Regional Prioritization**: Prioritizes news from **Kenya** and **East Africa** above global stories.
+- **Deep Intelligence**: Uses AI to generate **Significance Levels**, **Impact Analysis**, **Target Audience**, and **Actionable Advice** for every story.
+- **Context Awareness**: Automatically adds local context (policy, infrastructure) to Kenyan news stories.
+- **Aggregates news** from global sources (Hacker News, BleepingComputer) and regional sources (TechWeez, CIO Africa, CA Kenya, ODPC).
+- **Ranks stories** based on region, keywords, and priority topics (breach, policy, critical).
 - **Deduplicates** content to avoid repetition.
-- **Emails a clean briefing** to your inbox every day.
+- **Emails a clean "Top 10" briefing** with a professional PDF report attached.
 - **GitHub Actions Integration** for 100% automated daily runs.
 
 ## Setup
@@ -30,6 +33,7 @@ SMTP_PORT=587
 SMTP_USER=your_email@gmail.com
 SMTP_PASSWORD=abcd-efgh-ijkl-mnop
 RECIPIENT_EMAIL=ballzballer53@gmail.com
+GOOGLE_API_KEY=your_gemini_api_key
 ```
 
 Edit `.env` with your actual details:
@@ -41,6 +45,7 @@ Edit `.env` with your actual details:
     4. Create a new App Password named "CyberSecBrief".
     5. Copy the 16-character code (remove spaces) and paste it here.
 - `RECIPIENT_EMAIL`: Where to send the news (e.g., ballzballer53@gmail.com)
+- `GOOGLE_API_KEY`: Required for Deep Intelligence features (Significance, Impact Analysis, etc.). Get one [here](https://aistudio.google.com/app/apikey).
 
 ### 4. Running Locally
 ```bash

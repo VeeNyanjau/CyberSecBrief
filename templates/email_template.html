@@ -44,8 +44,8 @@
         /* Story Card */
         .story {
             background-color: #fff;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
             border-bottom: 1px solid #ecf0f1;
             transition: all 0.2s;
         }
@@ -58,22 +58,31 @@
             display: flex;
             align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .story-title {
-            font-size: 1.15em;
+            font-size: 1.25em;
             font-weight: 700;
             color: #2980b9;
             text-decoration: none;
             flex-grow: 1;
             margin-right: 10px;
+            min-width: 60%;
+        }
+
+        .badges-container {
+            display: flex;
+            gap: 5px;
+            align-items: center;
         }
 
         .badge {
             font-size: 0.75em;
             font-weight: bold;
-            padding: 2px 8px;
+            padding: 3px 8px;
             border-radius: 4px;
             text-transform: uppercase;
             white-space: nowrap;
@@ -94,26 +103,84 @@
             color: white;
         }
 
+        /* Significance Badges */
+        .sig-critical {
+            background-color: #c0392b;
+            color: white;
+            border: 1px solid #922b21;
+        }
+
+        .sig-high {
+            background-color: #d35400;
+            color: white;
+        }
+
+        .sig-medium {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .sig-low {
+            background-color: #27ae60;
+            color: white;
+        }
+
         .story-meta {
             font-size: 0.8em;
             color: #7f8c8d;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .summary {
-            font-size: 0.95em;
-            line-height: 1.5;
-            color: #444;
-            margin-bottom: 10px;
+            font-size: 1em;
+            line-height: 1.6;
+            color: #333;
+            margin-bottom: 15px;
         }
 
-        .why-box {
-            background-color: #eafaf1;
-            border-left: 3px solid #2ecc71;
-            padding: 10px;
+        /* Intelligence Box */
+        .intel-box {
+            background-color: #f8f9fa;
+            border: 1px solid #ecf0f1;
+            border-radius: 6px;
+            padding: 12px;
             font-size: 0.9em;
-            color: #27ae60;
-            margin-top: 8px;
+        }
+
+        .intel-row {
+            margin-bottom: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .intel-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .intel-label {
+            font-weight: bold;
+            color: #2c3e50;
+            margin-right: 5px;
+        }
+
+        .intel-value {
+            color: #555;
+        }
+
+        .why-text {
+            color: #2c3e50;
+            font-style: italic;
+        }
+
+        .context-box {
+            margin-top: 10px;
+            padding: 8px 10px;
+            background-color: #fce4ec;
+            /* Light pinkish for Kenya context focus */
+            border-left: 3px solid #e91e63;
+            color: #880e4f;
+            border-radius: 0 4px 4px 0;
         }
 
         .footer {
@@ -166,26 +233,64 @@
         <div class="story">
             <div class="story-header">
                 <a href="{{ story.link }}" class="story-title">{{ story.title }}</a>
-                {% if story.region == 'Kenya' %}
-                <span class="badge badge-kenya">Kenya</span>
-                {% elif story.region == 'East Africa' %}
-                <span class="badge badge-ea">East Africa</span>
-                {% else %}
-                <span class="badge badge-global">Global</span>
-                {% endif %}
+                <div class="badges-container">
+                    <!-- Region Badge -->
+                    {% if story.region == 'Kenya' %}
+                    <span class="badge badge-kenya">Kenya</span>
+                    {% elif story.region == 'East Africa' %}
+                    <span class="badge badge-ea">East Africa</span>
+                    {% else %}
+                    <span class="badge badge-global">Global</span>
+                    {% endif %}
+
+                    <!-- Significance Badge -->
+                    {% if story.significance %}
+                    {% set sig_class = 'sig-medium' %}
+                    {% if 'Critical' in story.significance %}{% set sig_class = 'sig-critical' %}
+                    {% elif 'High' in story.significance %}{% set sig_class = 'sig-high' %}
+                    {% elif 'Low' in story.significance %}{% set sig_class = 'sig-low' %}
+                    {% endif %}
+                    <span class="badge {{ sig_class }}">{{ story.significance }}</span>
+                    {% endif %}
+                </div>
             </div>
 
             <div class="story-meta">
-                {{ story.source }} • {{ story.published.strftime('%H:%M UTC') }} • Category: {{ story.category }}
+                {{ story.source }} • {{ story.published.strftime('%H:%M UTC') }} • {{ story.category }}
             </div>
 
             <div class="summary">{{ story.clean_summary }}</div>
 
-            {% if story.why_it_matters %}
-            <div class="why-box">
-                <strong>Why This Matters:</strong> {{ story.why_it_matters }}
+            <!-- Enhanced Intelligence Box -->
+            <div class="intel-box">
+                {% if story.why_it_matters %}
+                <div class="intel-row">
+                    <span class="intel-label">Why It Matters:</span>
+                    <span class="intel-value why-text">{{ story.why_it_matters }}</span>
+                </div>
+                {% endif %}
+
+                {% if story.who_should_care %}
+                <div class="intel-row">
+                    <span class="intel-label">Who Should Care:</span>
+                    <span class="intel-value">{{ story.who_should_care }}</span>
+                </div>
+                {% endif %}
+
+                {% if story.action %}
+                <div class="intel-row">
+                    <span class="intel-label">Action:</span>
+                    <span class="intel-value">{{ story.action }}</span>
+                </div>
+                {% endif %}
+
+                {% if story.kenya_context %}
+                <div class="context-box">
+                    <strong>🇰🇪 Kenya Context:</strong> {{ story.kenya_context }}
+                </div>
+                {% endif %}
             </div>
-            {% endif %}
+
         </div>
         {% endfor %}
         {% else %}

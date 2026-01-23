@@ -131,9 +131,12 @@ class ContentProcessor:
         # 5. GENERATE INSIGHTS (Enrichment)
         logger.info("Generating AI Insights for Top 10 stories...")
         for story in top_10_stories:
-            analysis = self.insight_gen.analyze_story(story)
+            analysis = self.insight_gen.analyze_story(story, region=story.get('region', 'Global'))
+            story['significance'] = analysis.get('significance', 'Medium')
             story['why_it_matters'] = analysis.get('why_it_matters', '')
-            story['research_tag'] = analysis.get('research_tag', 'General')
+            story['who_should_care'] = analysis.get('who_should_care', '')
+            story['action'] = analysis.get('action', '')
+            story['kenya_context'] = analysis.get('kenya_context', '')
 
         # Generate Report-Level Insights (Adapted for flat list)
         logger.info("Generating Executive Briefing Insights for Top 10...")

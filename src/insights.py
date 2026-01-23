@@ -31,10 +31,10 @@ class InsightGenerator:
             logger.error(f"Gemini generation failed: {e}")
             return ""
 
-    def analyze_story(self, story: Dict) -> Dict:
+    def analyze_story(self, story: Dict, region: str = "Global") -> Dict:
         """
-        Generates 'Why This Matters' and research tags for a single story.
-        Returns a dict with 'why_it_matters' and 'research_tag' (if applicable).
+        Generates deep intelligence analysis for a single story.
+        Returns a dict with 'why_it_matters', 'significance', 'who_should_care', 'action', and 'kenya_context' (if applicable).
         """
         if not self.enabled:
             return {}
@@ -43,30 +43,58 @@ class InsightGenerator:
         summary = story.get('clean_summary', '')
         category = story.get('category', '')
         
+        # Build prompt conditions
+        kenya_instruction = ""
+        if region == "Kenya":
+            kenya_instruction = "Task 5: Write a 'Kenya Context' section (1 sentence). Explicitly relate this to Kenya's national policy, local infrastructure, data protection laws (ODPC), or public sector systems."
+
         prompt = f"""
         Analyze this cybersecurity news item:
         Title: {title}
         Summary: {summary}
         Category: {category}
+        Region: {region}
 
-        Task 1: Write a "Why This Matters" analysis (max 2-3 sentences). Focus on impact, improved defense, or strategic importance.
-        Task 2: If the Category is 'Academic Research & Papers' or 'Tools, Frameworks & Open-Source Spotlight', classify it as ONE of: 'Unsolved Problems', 'Build This', 'Research Directions'. Otherwise, use 'General'.
+        Perform the following intelligence tasks:
+        Task 1: Assign a 'Significance Level' (Low / Medium / High / Critical).
+        Task 2: Write a 'Why This Matters' analysis (1 sentence). Explain the real-world impact.
+        Task 3: Identify 'Who Should Care' (comma-separated list, e.g., ISPs, Banks, SMEs, Regulators).
+        Task 4: Recommend a 'Practical Action' (1 short sentence). Practical guidance for the target audience.
+        {kenya_instruction}
+        
+        Constraint: If Category is 'Academic Research & Papers', ensure the 'Practical Action' is a concrete takeaway, not abstract theory.
 
         Output format:
-        Why: [Analysis text]
-        Tag: [Classification]
+        Significance: [Level]
+        Why: [Text]
+        Who: [List]
+        Action: [Text]
+        Context: [Text (only if requested)]
         """
         
         response_text = self._generate_text(prompt)
         
-        result = {'why_it_matters': '', 'research_tag': 'General'}
+        result = {
+            'significance': 'Medium', 
+            'why_it_matters': '', 
+            'who_should_care': '', 
+            'action': '',
+            'kenya_context': ''
+        }
         
-        # Simple parsing
+        # Parsing
         for line in response_text.split('\n'):
-            if line.startswith('Why:'):
+            line = line.strip()
+            if line.startswith('Significance:'):
+                result['significance'] = line.replace('Significance:', '').strip()
+            elif line.startswith('Why:'):
                 result['why_it_matters'] = line.replace('Why:', '').strip()
-            elif line.startswith('Tag:'):
-                result['research_tag'] = line.replace('Tag:', '').strip()
+            elif line.startswith('Who:'):
+                result['who_should_care'] = line.replace('Who:', '').strip()
+            elif line.startswith('Action:'):
+                result['action'] = line.replace('Action:', '').strip()
+            elif line.startswith('Context:'):
+                result['kenya_context'] = line.replace('Context:', '').strip()
                 
         return result
 
