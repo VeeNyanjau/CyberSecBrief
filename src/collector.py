@@ -12,6 +12,51 @@ class NewsCollector:
     def __init__(self):
         # Configuration for grouped sources
         self.sources = [
+            # 0. Regional Focus: Kenya & East Africa (Highest Priority)
+            {
+                "name": "TechWeez",
+                "url": "https://techweez.com/feed/",
+                "category": "Regional Focus",
+                "type": "rss"
+            },
+            {
+                "name": "CIO Africa",
+                "url": "https://cioafrica.co/feed/",
+                "category": "Regional Focus",
+                "type": "rss"
+            },
+            {
+                "name": "Business Daily (Tech)",
+                "url": "https://www.businessdailyafrica.com/service/rss/bdaafrica/technology/539552?x=1", # Standard Nation Media RSS pattern
+                "category": "Regional Focus",
+                "type": "rss"
+            },
+            # Kenyan Govt Bodies (via Google News RSS)
+            {
+                "name": "CA Kenya (News)",
+                "url": "https://news.google.com/rss/search?q=Communications+Authority+of+Kenya&hl=en-KE&gl=KE&ceid=KE:en",
+                "category": "Regional Focus",
+                "type": "rss"
+            },
+            {
+                "name": "KE-CIRT (News)",
+                "url": "https://news.google.com/rss/search?q=KE-CIRT+OR+National+Kenya+Computer+Incident+Response+Team&hl=en-KE&gl=KE&ceid=KE:en",
+                "category": "Regional Focus",
+                "type": "rss"
+            },
+            {
+                "name": "ODPC Kenya",
+                "url": "https://news.google.com/rss/search?q=Office+of+the+Data+Protection+Commissioner+Kenya&hl=en-KE&gl=KE&ceid=KE:en",
+                "category": "Regional Focus",
+                "type": "rss"
+            },
+            {
+                "name": "Ministry of ICT Kenya",
+                "url": "https://news.google.com/rss/search?q=Ministry+of+Information+Communications+and+The+Digital+Economy+Kenya&hl=en-KE&gl=KE&ceid=KE:en",
+                "category": "Regional Focus",
+                "type": "rss"
+            },
+
             # 1. Emerging Threats & Attack Patterns
             # Focus: New malware, novel phishing, zero-day exploitation patterns
             {

@@ -27,7 +27,7 @@ class EmailService:
             return None
         return pdf_buffer.getvalue()
 
-    def send_briefing(self, stories: Dict[str, List[Dict]], insights: Dict = None) -> None:
+    def send_briefing(self, stories: List[Dict], insights: Dict = None) -> None:
         """Generates the HTML briefing and sends it via email with PDF attachment."""
         try:
             # Load both templates

@@ -38,16 +38,18 @@ def main():
         categorized_stories, insights = processor.process(raw_stories)
         
         # Log results
-        for category, items in categorized_stories.items():
-            if items:
-                logger.info(f"--- {category} ({len(items)}) ---")
-                for i, item in enumerate(items):
-                    title = item.get('title', 'No Title')
-                    source = item.get('source', 'Unknown')
-                    why = item.get('why_it_matters', 'N/A')
-                    logger.info(f"   [ {i} ] {title} ({source})")
-                    if why:
-                        logger.info(f"       -> Why: {why[:50]}...")
+        # Log results
+        logger.info(f"--- Top {len(categorized_stories)} Stories ---")
+        for i, item in enumerate(categorized_stories):
+            title = item.get('title', 'No Title')
+            source = item.get('source', 'Unknown')
+            region = item.get('region', 'Global')
+            score = item.get('score', 0)
+            why = item.get('why_it_matters', 'N/A')
+            
+            logger.info(f"   [ {i+1} ] [{region}] {title} ({source}) - Score: {score}")
+            if why:
+                logger.info(f"       -> Why: {why[:50]}...")
         
         # Log Executive Summary availability
         if insights and insights.get('executive_summary'):
