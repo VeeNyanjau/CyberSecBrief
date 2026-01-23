@@ -2,8 +2,8 @@ name: Daily CyberSec Brief
 
 on:
   schedule:
-    # Runs at 08:00 UTC every day
-    - cron: '0 8 * * *'
+    # Runs at 07:00 UTC every day
+    - cron: '0 7 * * *'
   workflow_dispatch:
 
 jobs:
