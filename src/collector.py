@@ -193,10 +193,37 @@ class NewsCollector:
                 "category": "Sector-Specific Security",
                 "type": "rss"
             },
-             {
+            {
                 "name": "SecurityWeek (Cybercrime)",
                 "url": "https://feeds.feedburner.com/securityweek",
                 "category": "Sector-Specific Security", # Will need keyword filtering to be accurate
+                "type": "rss"
+            },
+            
+            # 10. Emerging Technologies (Policy: Max 1-2 per brief)
+            # Focus: Future relevance, 6-24 month impact
+            {
+                "name": "MIT Tech Review (Computing)",
+                "url": "https://www.technologyreview.com/feed/", 
+                "category": "Emerging Technologies",
+                "type": "rss"
+            },
+            {
+                "name": "NIST News (IT/Cyber)",
+                "url": "https://www.nist.gov/news-events/news/rss",
+                "category": "Emerging Technologies",
+                "type": "rss"
+            },
+            {
+                "name": "AWS Security Blog",
+                "url": "https://aws.amazon.com/blogs/security/feed/",
+                "category": "Emerging Technologies",
+                "type": "rss"
+            },
+            {
+                "name": "Google Cloud Security",
+                "url": "https://cloud.google.com/blog/products/identity-security/rss",
+                "category": "Emerging Technologies",
                 "type": "rss"
             }
         ]

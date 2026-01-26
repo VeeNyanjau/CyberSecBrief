@@ -45,8 +45,13 @@ class InsightGenerator:
         
         # Build prompt conditions
         kenya_instruction = ""
+        emerging_instruction = ""
+        
         if region == "Kenya":
             kenya_instruction = "Task 5: Write a 'Kenya Context' section (1 sentence). Explicitly relate this to Kenya's national policy, local infrastructure, data protection laws (ODPC), or public sector systems."
+            
+        if category == 'Emerging Technologies':
+            emerging_instruction = "Constraint for Task 2: For 'Why This Matters', Focus exclusively on 'Future Relevance'. Explain likely impact within 6-24 months."
 
         prompt = f"""
         Analyze this cybersecurity news item:
@@ -61,6 +66,7 @@ class InsightGenerator:
         Task 3: Identify 'Who Should Care' (comma-separated list, e.g., ISPs, Banks, SMEs, Regulators).
         Task 4: Recommend a 'Practical Action' (1 short sentence). Practical guidance for the target audience.
         {kenya_instruction}
+        {emerging_instruction}
         
         Constraint: If Category is 'Academic Research & Papers', ensure the 'Practical Action' is a concrete takeaway, not abstract theory.
 

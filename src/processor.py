@@ -144,6 +144,7 @@ class ContentProcessor:
         # 4. Selection Logic (Limits & Caps)
         final_selection = []
         academic_count = 0
+        emerging_count = 0
         
         for story in processed_stories:
             if len(final_selection) >= 8: # Hard Cap at 8
@@ -154,6 +155,12 @@ class ContentProcessor:
                 if academic_count >= 1:
                     continue
                 academic_count += 1
+
+            # Emerging Tech Limit: Max 2
+            if story.get('category') == 'Emerging Technologies':
+                if emerging_count >= 2:
+                    continue
+                emerging_count += 1
             
             final_selection.append(story)
 
