@@ -1,309 +1,455 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f9;
-            color: #333;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CyberSec Brief</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap');
 
-        .header {
-            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
-            color: #fff;
-            padding: 30px 20px;
-            text-align: center;
-            border-radius: 8px 8px 0 0;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-            letter-spacing: 0.5px;
-        }
+    body {
+      background-color: #050d1a;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
+      color: #e0f0ff;
+    }
 
-        .date {
-            font-size: 0.9em;
-            opacity: 0.8;
-            margin-top: 5px;
-        }
+    .email-wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
 
-        .content {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
+    /* ===== HEADER ===== */
+    .header {
+      background: linear-gradient(135deg, #0a1628 0%, #0d2545 100%);
+      border: 1px solid #00d4ff44;
+      border-radius: 12px;
+      padding: 32px 36px;
+      margin-bottom: 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 40px #00d4ff22, inset 0 0 60px #00d4ff08;
+    }
 
-        /* Story Card */
-        .story {
-            background-color: #fff;
-            padding: 20px;
-            margin-bottom: 20px;
-            border-bottom: 1px solid #ecf0f1;
-            transition: all 0.2s;
-        }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 180px; height: 180px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #00d4ff33 0%, transparent 70%);
+    }
 
-        .story:last-child {
-            border-bottom: none;
-        }
+    .header-eyebrow {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #00d4ff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 10px #00d4ff99;
+    }
 
-        .story-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            margin-bottom: 8px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+    .header h1 {
+      font-size: 28px;
+      font-weight: 900;
+      line-height: 1.2;
+      color: #ffffff;
+      margin-bottom: 10px;
+      text-shadow: 0 0 20px #00d4ff55;
+    }
 
-        .story-title {
-            font-size: 1.25em;
-            font-weight: 700;
-            color: #2980b9;
-            text-decoration: none;
-            flex-grow: 1;
-            margin-right: 10px;
-            min-width: 60%;
-        }
+    .header h1 span {
+      color: #00d4ff;
+      text-shadow: 0 0 20px #00d4ffcc;
+    }
 
-        .badges-container {
-            display: flex;
-            gap: 5px;
-            align-items: center;
-        }
+    .header-subtitle {
+      font-size: 13px;
+      color: #7ab8d4;
+      line-height: 1.6;
+      max-width: 500px;
+    }
 
-        .badge {
-            font-size: 0.75em;
-            font-weight: bold;
-            padding: 3px 8px;
-            border-radius: 4px;
-            text-transform: uppercase;
-            white-space: nowrap;
-        }
+    .header-date {
+      display: inline-block;
+      margin-top: 16px;
+      background-color: #00d4ff18;
+      border: 1px solid #00d4ff44;
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #00d4ff;
+      letter-spacing: 0.5px;
+    }
 
-        .badge-kenya {
-            background-color: #e74c3c;
-            color: white;
-        }
+    /* ===== INSIGHT BANNER ===== */
+    .insight-banner {
+      background: linear-gradient(135deg, #00d4ff18, #0077ff14);
+      border: 1px solid #00d4ff55;
+      border-radius: 10px;
+      padding: 18px 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 20px #00d4ff15;
+    }
 
-        .badge-ea {
-            background-color: #e67e22;
-            color: white;
-        }
+    .insight-banner-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #00d4ff;
+      margin-bottom: 8px;
+    }
 
-        .badge-global {
-            background-color: #95a5a6;
-            color: white;
-        }
+    .insight-banner p {
+      font-size: 13px;
+      color: #b0d8ee;
+      line-height: 1.65;
+      font-style: italic;
+    }
 
-        /* Significance Badges */
-        .sig-critical {
-            background-color: #c0392b;
-            color: white;
-            border: 1px solid #922b21;
-        }
+    /* ===== SIGNALS ===== */
+    .signals-section {
+      background-color: #080f1e;
+      border: 1px solid #1a3050;
+      border-radius: 10px;
+      padding: 16px 22px;
+      margin-bottom: 24px;
+    }
 
-        .sig-high {
-            background-color: #d35400;
-            color: white;
-        }
+    .signals-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: #4ade80;
+      margin-bottom: 12px;
+      text-shadow: 0 0 8px #4ade8066;
+    }
 
-        .sig-medium {
-            background-color: #f39c12;
-            color: white;
-        }
+    .signal-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 8px;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #9ab8cc;
+    }
 
-        .sig-low {
-            background-color: #27ae60;
-            color: white;
-        }
+    .signal-item:last-child { margin-bottom: 0; }
 
-        .story-meta {
-            font-size: 0.8em;
-            color: #7f8c8d;
-            margin-bottom: 12px;
-        }
+    .signal-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4ade80;
+      box-shadow: 0 0 6px #4ade80;
+      margin-top: 6px;
+      margin-right: 10px;
+      flex-shrink: 0;
+    }
 
-        .summary {
-            font-size: 1em;
-            line-height: 1.6;
-            color: #333;
-            margin-bottom: 15px;
-        }
+    .signal-item strong { color: #d0eeff; font-weight: 700; }
 
-        /* Intelligence Box */
-        .intel-box {
-            background-color: #f8f9fa;
-            border: 1px solid #ecf0f1;
-            border-radius: 6px;
-            padding: 12px;
-            font-size: 0.9em;
-        }
+    /* ===== SECTION LABEL ===== */
+    .section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: #4a90b8;
+      margin-bottom: 14px;
+      padding-left: 4px;
+    }
 
-        .intel-row {
-            margin-bottom: 8px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 5px;
-        }
+    /* ===== STORY GRID ===== */
+    .stories-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 30px;
+    }
 
-        .intel-row:last-child {
-            margin-bottom: 0;
-        }
+    /* ===== STORY CARD ===== */
+    .story-card {
+      background: linear-gradient(160deg, #0d1e35, #091525);
+      border: 1px solid #1c3a5a;
+      border-radius: 10px;
+      padding: 18px 16px 16px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
 
-        .intel-label {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-right: 5px;
-        }
+    .story-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #00d4ff, #0077ff);
+      box-shadow: 0 0 10px #00d4ff88;
+    }
 
-        .intel-value {
-            color: #555;
-        }
+    /* Number badge */
+    .story-number {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00d4ff, #0077ff);
+      box-shadow: 0 0 14px #00d4ffaa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      color: #050d1a;
+      flex-shrink: 0;
+    }
 
-        .why-text {
-            color: #2c3e50;
-            font-style: italic;
-        }
+    .story-icon {
+      font-size: 26px;
+      margin-bottom: 10px;
+      display: block;
+    }
 
-        .context-box {
-            margin-top: 10px;
-            padding: 8px 10px;
-            background-color: #fce4ec;
-            /* Light pinkish for Kenya context focus */
-            border-left: 3px solid #e91e63;
-            color: #880e4f;
-            border-radius: 0 4px 4px 0;
-        }
+    /* Badges */
+    .story-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
 
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 0.85em;
-            color: #95a5a6;
-            padding-top: 20px;
-            border-top: 1px solid #eee;
-        }
-    </style>
+    .badge {
+      font-size: 8.5px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 2px 7px;
+      border-radius: 3px;
+    }
+
+    .badge-kenya   { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #ef4444; }
+    .badge-ea      { background-color: #7c2d12; color: #fdba74; border: 1px solid #f97316; }
+    .badge-global  { background-color: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+    .sig-critical  { background-color: #7f1d1d; color: #fca5a5; border: 1px solid #dc2626; }
+    .sig-high      { background-color: #7c2d12; color: #fdba74; border: 1px solid #ea580c; }
+    .sig-medium    { background-color: #713f12; color: #fde68a; border: 1px solid #ca8a04; }
+    .sig-low       { background-color: #14532d; color: #86efac; border: 1px solid #22c55e; }
+
+    .story-title {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #d0eeff;
+      text-decoration: none;
+      line-height: 1.35;
+      margin-bottom: 6px;
+      margin-right: 36px; /* space for number badge */
+    }
+
+    .story-title:hover { color: #00d4ff; text-shadow: 0 0 8px #00d4ff66; }
+
+    .story-meta {
+      font-size: 10.5px;
+      color: #3a6a88;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .story-summary {
+      font-size: 12px;
+      line-height: 1.6;
+      color: #7a9fb8;
+    }
+
+    /* Intel box inside card */
+    .intel-box {
+      margin-top: 10px;
+      background-color: #050d1a;
+      border-left: 2px solid #00d4ff55;
+      padding: 8px 10px;
+      border-radius: 0 6px 6px 0;
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .intel-row { margin-bottom: 4px; color: #6a9ab8; }
+    .intel-row:last-child { margin-bottom: 0; }
+    .intel-label { font-weight: 700; color: #00d4ff99; }
+
+    /* Kenya box */
+    .kenya-box {
+      margin-top: 8px;
+      background-color: #1a0808;
+      border-left: 2px solid #ef4444;
+      padding: 7px 10px;
+      border-radius: 0 5px 5px 0;
+      font-size: 11px;
+      color: #fca5a5;
+      line-height: 1.5;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+      text-align: center;
+      padding: 40px;
+      color: #3a6a88;
+      font-style: italic;
+      font-size: 14px;
+      grid-column: span 2;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background: linear-gradient(135deg, #080f1e, #0a1628);
+      border: 1px solid #1c3a5a;
+      border-radius: 10px;
+      padding: 24px 32px;
+      text-align: center;
+    }
+
+    .footer-brand {
+      font-size: 16px;
+      font-weight: 900;
+      color: #00d4ff;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-shadow: 0 0 14px #00d4ffbb;
+      margin-bottom: 12px;
+    }
+
+    .footer-divider {
+      border: none;
+      border-top: 1px solid #1c3a5a;
+      margin: 12px 0;
+    }
+
+    .footer p {
+      font-size: 11px;
+      color: #3a6a88;
+      line-height: 1.7;
+    }
+
+    .footer a { color: #00d4ff; text-decoration: none; }
+    .footer a:hover { text-shadow: 0 0 8px #00d4ff; }
+  </style>
 </head>
-
 <body>
+  <div class="email-wrapper">
+
+    <!-- HEADER -->
     <div class="header">
-        <h1>Daily Cybersecurity & IT Briefing</h1>
-        <div class="date">{{ date }}</div>
+      <div class="header-eyebrow">⚡ CyberSec Brief</div>
+      <h1>Your daily <span>cybersecurity</span> intelligence</h1>
+      <div class="header-subtitle">Curated threats, vulnerabilities &amp; incidents — focused on Kenya &amp; East Africa.</div>
+      <div class="header-date">{{ date }}</div>
     </div>
 
-    <!-- Executive Insight Summary -->
+    <!-- EXECUTIVE INSIGHT -->
     {% if insights.executive_summary or insights.signals %}
-    <div
-        style="background-color: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin-bottom: 20px; border-left: 5px solid #3498db;">
-        <h2 style="color: #2c3e50; font-size: 1.25em; margin-top: 0;">Executive Insight</h2>
-        {% if insights.executive_summary %}
-        <p style="font-style: italic; color: #555; line-height: 1.5;">{{ insights.executive_summary }}</p>
-        {% endif %}
-
-        {% if insights.signals %}
-        <div style="margin-top: 15px;">
-            <strong style="color: #27ae60;">Detected Signals & Patterns:</strong>
-            <ul style="margin-top: 10px; padding-left: 20px; line-height: 1.5;">
-                {% for signal in insights.signals %}
-                <li style="margin-bottom: 8px;">
-                    <strong>{{ signal.title }}:</strong> {{ signal.description }}
-                </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
+    <div class="insight-banner">
+      <div class="insight-banner-label">📡 Executive Insight</div>
+      {% if insights.executive_summary %}
+      <p>{{ insights.executive_summary }}</p>
+      {% endif %}
     </div>
     {% endif %}
 
-    <div class="content">
-        <h2 style="color: #2c3e50; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; margin-bottom: 20px;">Top
-            Stories</h2>
+    <!-- SIGNALS -->
+    {% if insights.signals %}
+    <div class="signals-section">
+      <div class="signals-title">🟢 Detected Signals &amp; Patterns</div>
+      {% for signal in insights.signals %}
+      <div class="signal-item">
+        <span class="signal-dot"></span>
+        <span><strong>{{ signal.title }}:</strong> {{ signal.description }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
 
-        {% if stories %}
-        {% for story in stories %}
-        <div class="story">
-            <div class="story-header">
-                <a href="{{ story.link }}" class="story-title">{{ story.title }}</a>
-                <div class="badges-container">
-                    <!-- Region Badge -->
-                    {% if story.region == 'Kenya' %}
-                    <span class="badge badge-kenya">Kenya</span>
-                    {% elif story.region == 'East Africa' %}
-                    <span class="badge badge-ea">East Africa</span>
-                    {% else %}
-                    <span class="badge badge-global">Global</span>
-                    {% endif %}
+    <!-- STORIES -->
+    <div class="section-label">Top Stories</div>
 
-                    <!-- Significance Badge -->
-                    {% if story.significance %}
-                    {% set sig_class = 'sig-medium' %}
-                    {% if 'Critical' in story.significance %}{% set sig_class = 'sig-critical' %}
-                    {% elif 'High' in story.significance %}{% set sig_class = 'sig-high' %}
-                    {% elif 'Low' in story.significance %}{% set sig_class = 'sig-low' %}
-                    {% endif %}
-                    <span class="badge {{ sig_class }}">{{ story.significance }}</span>
-                    {% endif %}
-                </div>
-            </div>
+    {% if stories %}
+    <div class="stories-grid">
+      {% for story in stories %}
 
-            <div class="story-meta">
-                {{ story.source }} • {{ story.published.strftime('%H:%M UTC') }} • {{ story.category }}
-            </div>
+      {# -- icon by category -- #}
+      {% set cat_icon = '🔐' %}
+      {% if 'Malware' in story.category or 'Ransomware' in story.category %}{% set cat_icon = '🦠' %}
+      {% elif 'Breach' in story.category or 'Data' in story.category %}{% set cat_icon = '💾' %}
+      {% elif 'Vulnerability' in story.category or 'Exploit' in story.category %}{% set cat_icon = '⚠️' %}
+      {% elif 'Phishing' in story.category or 'Social' in story.category %}{% set cat_icon = '🎣' %}
+      {% elif 'Nation' in story.category or 'APT' in story.category %}{% set cat_icon = '🕵️' %}
+      {% elif 'Policy' in story.category or 'Regulation' in story.category %}{% set cat_icon = '📜' %}
+      {% elif 'DDoS' in story.category %}{% set cat_icon = '🌊' %}
+      {% endif %}
 
-            <div class="summary">{{ story.clean_summary }}</div>
+      {# -- significance class -- #}
+      {% set sig_class = 'sig-medium' %}
+      {% if story.significance %}
+        {% if 'Critical' in story.significance %}{% set sig_class = 'sig-critical' %}
+        {% elif 'High' in story.significance %}{% set sig_class = 'sig-high' %}
+        {% elif 'Low' in story.significance %}{% set sig_class = 'sig-low' %}
+        {% endif %}
+      {% endif %}
 
-            <!-- Enhanced Intelligence Box -->
-            <div class="intel-box">
-                {% if story.why_it_matters %}
-                <div class="intel-row">
-                    <span class="intel-label">Why It Matters:</span>
-                    <span class="intel-value why-text">{{ story.why_it_matters }}</span>
-                </div>
-                {% endif %}
+      <div class="story-card">
+        <div class="story-number">{{ loop.index }}</div>
+        <span class="story-icon">{{ cat_icon }}</span>
 
-                {% if story.who_should_care %}
-                <div class="intel-row">
-                    <span class="intel-label">Who Should Care:</span>
-                    <span class="intel-value">{{ story.who_should_care }}</span>
-                </div>
-                {% endif %}
-
-                {% if story.action %}
-                <div class="intel-row">
-                    <span class="intel-label">Action:</span>
-                    <span class="intel-value">{{ story.action }}</span>
-                </div>
-                {% endif %}
-
-                {% if story.kenya_context %}
-                <div class="context-box">
-                    <strong>🇰🇪 Kenya Context:</strong> {{ story.kenya_context }}
-                </div>
-                {% endif %}
-            </div>
-
+        <div class="story-badges">
+          {% if story.region == 'Kenya' %}<span class="badge badge-kenya">Kenya</span>
+          {% elif story.region == 'East Africa' %}<span class="badge badge-ea">East Africa</span>
+          {% else %}<span class="badge badge-global">Global</span>
+          {% endif %}
+          {% if story.significance %}<span class="badge {{ sig_class }}">{{ story.significance }}</span>{% endif %}
         </div>
-        {% endfor %}
-        {% else %}
-        <div class="empty-state" style="font-style: italic; color: #95a5a6; padding: 20px; text-align: center;">
-            No significant updates today.
+
+        <a href="{{ story.link }}" class="story-title">{{ story.title }}</a>
+
+        <div class="story-meta">{{ story.source }} &nbsp;·&nbsp; {{ story.published.strftime('%H:%M UTC') }} &nbsp;·&nbsp; {{ story.category }}</div>
+
+        <div class="story-summary">{{ story.clean_summary }}</div>
+
+        {% if story.why_it_matters or story.who_should_care or story.action %}
+        <div class="intel-box">
+          {% if story.why_it_matters %}<div class="intel-row"><span class="intel-label">Why: </span>{{ story.why_it_matters }}</div>{% endif %}
+          {% if story.who_should_care %}<div class="intel-row"><span class="intel-label">Who: </span>{{ story.who_should_care }}</div>{% endif %}
+          {% if story.action %}<div class="intel-row"><span class="intel-label">Action: </span>{{ story.action }}</div>{% endif %}
         </div>
         {% endif %}
-    </div>
 
+        {% if story.kenya_context %}
+        <div class="kenya-box"><strong>🇰🇪 Kenya:</strong> {{ story.kenya_context }}</div>
+        {% endif %}
+      </div>
+
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="stories-grid">
+      <div class="empty-state">No significant updates today.</div>
+    </div>
+    {% endif %}
+
+    <!-- FOOTER -->
     <div class="footer">
-        <p>Generated automatically by Info Hunter • <a href="https://github.com/vickymuiruri/CyberSecBrief"
-                style="color:#95a5a6;">View on GitHub</a></p>
+      <div class="footer-brand">CyberSec Brief</div>
+      <hr class="footer-divider">
+      <p>
+        Generated by Info Hunter &nbsp;·&nbsp;
+        <a href="https://github.com/vickymuiruri/CyberSecBrief">View on GitHub</a>
+      </p>
+      <p style="margin-top:5px;">You're receiving this because you subscribed to CyberSec Brief.</p>
     </div>
-</body>
 
+  </div>
+</body>
 </html>
